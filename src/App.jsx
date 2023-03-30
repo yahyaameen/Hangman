@@ -16,7 +16,7 @@ function App() {
 
   const letterStatus = generateLetterStatuses()
   let [letters, setLetters] = useState(letterStatus)
-  let [solution, setSolution] = useState({word:'REACT',hint:'javascript library'})
+  let [solution, setSolution] = useState({word:'JAVA',hint:'programing language'})
   let [score, setScore] = useState(100)
 
   const updateScore = (letter) =>{
