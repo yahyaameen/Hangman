@@ -3,6 +3,7 @@ import Score from './components/Score';
 import Solution from './components/Solution';
 import Letters from './components/Letters';
 import './App.css';
+import EndGame from './components/EndGame';
 
 function App() {
 
@@ -18,12 +19,33 @@ function App() {
   let [letters, setLetters] = useState(letterStatus)
   let [solution, setSolution] = useState({word:'JAVA',hint:'programing language'})
   let [score, setScore] = useState(100)
+  let [endGame, setEndGame] = useState(false)
+  let [message, setMessage] = useState("")
 
-  const updateScore = (letter) =>{
+  const isGuessedWord = (newLetters) => {
+    let wordArray = solution.word.split("")
+    for (const letter of wordArray) {
+       if (newLetters[letter] === false) {
+           return false
+       }
+     }
+     return true
+  }
+
+  const updateScore = (letter,newLetters) =>{
     if (solution.word.includes(letter)) {
       setScore(score + 5)
+      if (isGuessedWord(newLetters)) {
+        setEndGame(true)
+        setMessage("Congratulations")
+      }
     }else{
-      setScore(score - 20)
+      const newScore = score -20
+      setScore(newScore)
+      if (newScore <= 0 ) {
+        setEndGame(true)
+        setMessage(`the secret word is ${solution.word}`)
+      }
     }
   }
 
@@ -31,7 +53,7 @@ function App() {
     let newLetters = {...letters}
     newLetters[letter] = true
     setLetters(newLetters);
-    updateScore(letter)
+    updateScore(letter,newLetters)
   }
 
   return (
@@ -39,6 +61,7 @@ function App() {
         <Score score={score} />
         <Solution letterStatus={letters} solution={solution}  />
         <Letters letterStatus={letters} selectLetter={selectLetter} />
+        <EndGame message={message} endGame={endGame} />
     </div>
   );
 }
